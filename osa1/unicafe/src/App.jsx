@@ -8,6 +8,24 @@ const Header = ({ text }) => {
   )
 }
 
+const Average = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad
+  if (total === 0) return (<div>average 0</div>)
+  const average = (good - bad) / total
+  return (<div>average {average}</div>)
+}
+
+const Total = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad
+  return (<div>all {total}</div>)
+}
+
+const Percentage = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad
+  const percent = total === 0 ? 0: (good / total) * 100
+  return (<div>positive {percent} %</div>)
+}
+
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const App = () => {
@@ -27,10 +45,15 @@ const App = () => {
       <Button onClick={handleGood} text='good' />
       <Button onClick={handleNeutral} text='neutral' />
       <Button onClick={handleBad} text='bad' />
+
       <Header text={headers[1]} />
       good {good} <br></br>
       neutral {neutral} <br></br>
       bad {bad}
+      
+      <Total good={good} neutral={neutral} bad={bad} />
+      <Average good={good} neutral={neutral} bad={bad} />
+      <Percentage good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
