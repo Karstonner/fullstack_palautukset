@@ -29,6 +29,11 @@ const Percentage = ({ good, neutral, bad }) => {
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const Statistics = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad
+  if (total === 0) return (
+    <div>No feedback given</div>
+  )
+
   return (
     <div>
       <div>good {good}</div>
