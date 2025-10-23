@@ -28,6 +28,20 @@ const Percentage = ({ good, neutral, bad }) => {
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
+const Statistics = ({ good, neutral, bad }) => {
+  return (
+    <div>
+      <div>good {good}</div>
+      <div>neutral {neutral}</div>
+      <div>bad {bad}</div>
+
+      <Total good={good} neutral={neutral} bad={bad} />
+      <Average good={good} neutral={neutral} bad={bad} />
+      <Percentage good={good} neutral={neutral} bad={bad} />
+    </div>
+  )
+}
+
 const App = () => {
   const headers = ['give feedback', 'statistics']
 
@@ -47,13 +61,7 @@ const App = () => {
       <Button onClick={handleBad} text='bad' />
 
       <Header text={headers[1]} />
-      good {good} <br></br>
-      neutral {neutral} <br></br>
-      bad {bad}
-      
-      <Total good={good} neutral={neutral} bad={bad} />
-      <Average good={good} neutral={neutral} bad={bad} />
-      <Percentage good={good} neutral={neutral} bad={bad} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
