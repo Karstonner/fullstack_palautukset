@@ -11,10 +11,12 @@ const Header = ({ text }) => {
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const StatisticLine = ({ text, value }) => {
-  if (text === "positive") {
-    return <div>{text} {value} %</div>
-  }
-  return <div>{text} {value}</div>
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{text === "positive" ? `${value} %` : value}</td>
+    </tr>
+  )
 }
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -23,15 +25,20 @@ const Statistics = ({ good, neutral, bad }) => {
     <div>No feedback given</div>
   )
 
+  const average = ((good - bad) / total).toFixed(1)
+  const positive = ((good / total) * 100).toFixed(1)
+
   return (
-    <div>
-      <StatisticLine text="good" value={good} />
-      <StatisticLine text="neutral" value={neutral} />
-      <StatisticLine text="bad" value={bad} />
-      <StatisticLine text="all" value={total} />
-      <StatisticLine text="average" value={((good - bad) / total)} />
-      <StatisticLine text="positive" value={((good / total) * 100)} />
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={total} />
+        <StatisticLine text="average" value={average} />
+        <StatisticLine text="positive" value={positive} />
+      </tbody>
+    </table>
   )
 }
 
