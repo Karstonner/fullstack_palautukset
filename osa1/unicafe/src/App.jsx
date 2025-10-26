@@ -58,6 +58,17 @@ const App = () => {
   
   const nextAnecdote = () => setSelected(Math.floor(Math.random() * anecdotes.length))
 
+  const [votes, setVotes] = useState(() => Array(anecdotes.length).fill(0))
+  const voteup = () => {
+    setVotes(prev => {
+      const copy = [...prev]
+      copy[selected] += 1
+      return copy
+    })
+  }
+
+  const currentVotes = votes[selected] ?? 0
+
   const headers = ['give feedback', 'statistics']
 
   const [good, setGood] = useState(0)
@@ -70,8 +81,11 @@ const App = () => {
 
   return (
     <div>
-      {anecdotes[selected]} <br></br>
-      <button onClick={nextAnecdote}>next anecdote</button>
+      {anecdotes[selected]} <br />
+      <button onClick={voteup}>vote</button>
+      <button onClick={nextAnecdote}>next anecdote</button> <br />
+      has {currentVotes} votes
+      
       <Header text={headers[0]} />
       <Button onClick={handleGood} text='good' />
       <Button onClick={handleNeutral} text='neutral' />
