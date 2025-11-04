@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import Persons from "./components/PersonComponent"
+import Filter from './components/FilterComponent'
+import PersonForm from './components/PersonFormComponent'
+import Persons from './components/PersonComponent'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -21,8 +23,7 @@ const App = () => {
     e.preventDefault()
     const nameTrimmed = newName.trim()
     const numberTrimmed = newNumber.trim()
-    if (!nameTrimmed) return
-    if (!numberTrimmed) return
+    if (!nameTrimmed || !numberTrimmed) return
 
     if (persons.some(p => p.name === nameTrimmed)) {
       alert(`${nameTrimmed} is already added`)
@@ -30,7 +31,7 @@ const App = () => {
     }
 
     if (persons.some(p => p.number === numberTrimmed)) {
-      alert(`${nameTrimmed} is already added`)
+      alert(`${numberTrimmed} is already added`)
       return
     }
 
@@ -51,20 +52,22 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with: <input value={filter} onChange={handleFilterChange} />
-      </div>
+
+      <Filter filter={filter} onChange={handleFilterChange} />
+
       <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>name: <input value={newName} onChange={handleNameChange} /></div>
-        <div>number: <input value={newNumber} onChange={handleNumberChange} /></div>
-        <div><button type="submit">add</button></div>
-      </form>
+      <PersonForm
+        onSubmit={addPerson}
+        newName={newName}
+        onNameChange={handleNameChange}
+        newNumber={newNumber}
+        onNumberChange={handleNumberChange}
+      />
+
       <h2>Numbers</h2>
       <Persons persons={filteredPersons} />
     </div>
   )
-
 }
 
 export default App
