@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/person'
 import Filter from './components/FilterComponent'
 import PersonForm from './components/PersonFormComponent'
 import Persons from './components/PersonComponent'
@@ -8,8 +8,8 @@ const App = () => {
   const [persons, setPersons] = useState([])
   
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data))
+    personService.getAll()
+      .then(data => setPersons(data))
       .catch(err => console.error('Failed to fetch persons:', err))
   }, [])
 
@@ -42,15 +42,26 @@ const App = () => {
       number: numberTrimmed
     }
 
-    axios
-      .post('http://localhost:3001/persons', newPerson)
-      .then(response => {
-        console.log(response)
+    personService.create(newPerson)
+      .then(returned => {
+        setPersons(prev => prev.concat(returned))
+        setNewName('')
+        setNewNumber('')
       })
+      .catch(err => console.error('Failed to create person:', err))
+  }
 
-    setPersons(prev => prev.concat(newPerson))
-    setNewName('')
-    setNewNumber('')
+  const handleDelete = (id, name) => {
+    if (!window.confirm(`Delete ${name} ?`)) return
+    personService.remove(id)
+      .then(() => {
+        setPersons(prev => prev.filter(p => p.id !== id))
+      })
+      .catch(err => {
+        console.error('Failed to delete person:', err)
+        alert(`Information of ${name} has already been removed from server!`)
+        setPersons(prev => prev.filter(p => p.id !== id))
+      })
   }
 
   const filteredPersons = persons.filter(p =>
@@ -73,7 +84,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} onDelete={handleDelete} />
     </div>
   )
 }
