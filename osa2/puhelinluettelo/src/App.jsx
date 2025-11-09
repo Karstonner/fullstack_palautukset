@@ -42,6 +42,12 @@ const App = () => {
       number: numberTrimmed
     }
 
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        console.log(response)
+      })
+
     setPersons(prev => prev.concat(newPerson))
     setNewName('')
     setNewNumber('')
