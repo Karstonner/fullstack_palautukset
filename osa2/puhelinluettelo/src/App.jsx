@@ -27,8 +27,28 @@ const App = () => {
     const numberTrimmed = newNumber.trim()
     if (!nameTrimmed || !numberTrimmed) return
 
-    if (persons.some(p => p.name === nameTrimmed)) {
-      alert(`${nameTrimmed} is already added`)
+    const existing = persons.find(p => p.name === nameTrimmed)
+
+    if (existing) {
+      if (existing.number === numberTrimmed) {
+        alert(`${nameTrimmed} is already added with the same number`)
+        return
+      }
+
+      if (window.confirm(`${nameTrimmed} is already added to the phonebook, replace the old number with the new one?`)) {
+        const updatedPerson = { ...existing, number: numberTrimmed }
+        personService.update(existing.id, updatedPerson)
+          .then(returned => {
+            setPersons(prev => prev.map(p => p.id !== existing.id ? p : returned))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(err => {
+            console.error('Failed to update person:', err)
+            alert(`Information of ${nameTrimmed} has already been removed from the server`)
+            setPersons(prev => prev.filter(p => p.id !== existing.id))
+          })
+      }
       return
     }
 
