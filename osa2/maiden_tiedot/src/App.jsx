@@ -2,9 +2,15 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Filter from './components/FilterComponent'
 
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+
 const App = () => {
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
+
+  const showMore = (name) => {
+    setFilter(name)
+  }
 
   useEffect(() => {
     const query = filter.trim()
@@ -52,7 +58,10 @@ const App = () => {
       ) : (
         <ul>
         {filteredCountries.map(country => (
-          <li key={country.cca3}>{country.name.common}</li>
+          <li key={country.cca3}>
+            {country.name.common}
+            <Button onClick={() => showMore(country.name.common)} text="Show" />
+          </li>
         ))}
       </ul>
       )}
