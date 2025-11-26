@@ -24,6 +24,15 @@ let contacts = [
   }
 ]
 
+app.get('/info', (request, response) => {
+  const time = new Date()
+  const responseText = `
+  Phonebook has info for ${contacts.length} people
+  ${time}`
+  response.set('Content-Type', 'text/plain; charset=utf-8')
+  response.send(responseText)
+})
+
 app.get('/api/persons', (request, response) => {
   response.json(contacts)
 })
