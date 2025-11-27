@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 
 let contacts = [
   {
@@ -24,6 +25,14 @@ let contacts = [
   }
 ]
 
+const generateId = () => {
+  let newId
+  do {
+    newId = Math.floor(Math.random() * 1000000).toString()
+  } while (contacts.find(contact => contact.id === newId))
+  return newId
+}
+
 app.get('/info', (request, response) => {
   const time = new Date()
   const responseText = `
@@ -46,6 +55,20 @@ app.get('/api/persons/:id', (request, response) => {
     })
   }
   response.json(contact)
+})
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+  const newId = generateId()
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: newId,
+  }
+
+  contacts = contacts.concat(person)
+
+  response.json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
