@@ -59,7 +59,23 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
+  const newName = body.name
+  const newNumber = body.number
+
+  if (contacts.find(contact => contact.name === newName)) {
+    return response.status(400).json({
+      error: 'name already exists'
+    })
+  }
+
+  if (contacts.find(contact => contact.number === newNumber)) {
+    return response.status(400).json({
+      error: 'number already exists'
+    })
+  }
+
   const newId = generateId()
+
   const person = {
     name: body.name,
     number: body.number,
